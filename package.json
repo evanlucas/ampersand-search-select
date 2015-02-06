@@ -1,0 +1,32 @@
+{
+  "name": "ampersand-search-select",
+  "version": "0.1.0",
+  "description": "Creates a search bar that shows a list of matching items that can be selected.",
+  "main": "ampersand-search-select.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/helpdotcom/ampersand-search-select"
+  },
+  "keywords": [
+    "ampersand",
+    "search",
+    "bar",
+    "select"
+  ],
+  "author": "Alexander Martin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/helpdotcom/ampersand-search-select/issues"
+  },
+  "homepage": "https://github.com/helpdotcom/ampersand-search-select",
+  "dependencies": {
+    "ampersand-state": "^4.4.4",
+    "ampersand-subcollection": "^2.0.1",
+    "ampersand-view": "^7.2.0",
+    "d3": "^3.5.3",
+    "lodash": "^3.1.0"
+  }
+}
