@@ -29,7 +29,7 @@
       this.on('change:_selected', function(selectState, selected) {
         selectState.selected.configure({
           filter: function(model) {
-            return !!~selected.indexOf(model[selectState.idAttribute]);
+            return selected.indexOf(model[selectState.idAttribute]) > -1;
           }
         }, true);
       });
