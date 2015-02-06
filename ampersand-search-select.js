@@ -123,105 +123,107 @@
         .attr('y2', 10);
     },
     renderQuerySet: function(querySet) {
-      if (this.svg) {
-        var idAttribute = this.model.idAttribute;
-        var queryAttribute = this.model.queryAttribute;
-        var imageAttribute = this.model.imageAttribute;
-        var selected = this.model._selected;
-
-        var queryContainers = this.svg.selectAll('svg.ampersand-search-select-query-container')
-          .data(querySet);
-
-        queryContainers.exit()
-          .remove();
-
-        var queryContainer = queryContainers.enter().append('svg')
-          .attr('class', 'ampersand-search-select-query-container')
-          .attr('y', function(d) { return (2.5 + querySet.indexOf(d) * 2.5) + 'em'; })
-          .style('overflow', 'visible');
-
-        queryContainer.append('defs').append('clipPath')
-          .attr('id', function(d) { return 'ampersand-search-select-clip-path-' + querySet.indexOf(d); })
-        .append('circle')
-          .attr('r', 16)
-          .attr('cx', 16)
-          .attr('cy', 16);
-
-        queryContainer.append('image')
-          .attr('class', 'ampersand-search-select-query-image')
-          .attr('clip-path', function(d) { return 'url(#ampersand-search-select-clip-path-' + querySet.indexOf(d) + ')'; })
-          .attr('height', 32)
-          .attr('width', 32);
-
-        queryContainer.append('text')
-          .attr('class', 'ampersand-search-select-query-text')
-          .attr('x', 48)
-          .attr('y', 20);
-
-        var queryAdd = queryContainer.append('svg')
-          .attr('class', 'ampersand-search-select-query-add')
-          .attr('x', '100%')
-          .attr('y', '0.5em')
-          .style('overflow', 'visible');
-
-        queryAdd.append('circle')
-          .attr('class', 'ampersand-search-select-query-add-circle')
-          .attr('r', 12)
-          .attr('cx', -16)
-          .attr('cy', 8);
-
-        queryAdd.append('line')
-          .attr('class', 'ampersand-search-select-query-add-line')
-          .attr('x1', -20)
-          .attr('y1', 8)
-          .attr('x2', -12)
-          .attr('y2', 8);
-
-        queryAdd.append('line')
-          .attr('class', 'ampersand-search-select-query-add-line')
-          .attr('x1', -16)
-          .attr('y1', 4)
-          .attr('x2', -16)
-          .attr('y2', 12);
-
-        var queryCheck = queryContainer.append('svg')
-          .attr('class', 'ampersand-search-select-query-check')
-          .attr('x', '100%')
-          .attr('y', '0.5em')
-          .style('overflow', 'visible');
-
-        queryCheck.append('circle')
-          .attr('class', 'ampersand-search-select-query-check-circle')
-          .attr('r', 12)
-          .attr('cx', -16)
-          .attr('cy', 8);
-
-        queryCheck.append('line')
-          .attr('class', 'ampersand-search-select-query-check-line')
-          .attr('x1', -20)
-          .attr('y1', 8)
-          .attr('x2', -16)
-          .attr('y2', 12);
-
-        queryCheck.append('line')
-          .attr('class', 'ampersand-search-select-query-check-line')
-          .attr('x1', -16)
-          .attr('y1', 12)
-          .attr('x2', -12)
-          .attr('y2', 4);
-
-        queryContainers.select('image.ampersand-search-select-query-image')
-          .attr('xlink:href', function(d) { return d[imageAttribute]; });
-
-        queryContainers.select('text.ampersand-search-select-query-text')
-          .text(function(d) { return d[queryAttribute]; });
-
-        queryContainers.select('svg.ampersand-search-select-query-add')
-          .style('display', function(d) { return selected.indexOf(d[idAttribute]) === -1 ? 'initial' : 'none'; });
-
-        queryContainers.select('svg.ampersand-search-select-query-check')
-          .style('display', function(d) { return selected.indexOf(d[idAttribute]) > -1 ? 'initial' : 'none'; });
+      if (!this.svg) {
+        return;
       }
+
+      var idAttribute = this.model.idAttribute;
+      var queryAttribute = this.model.queryAttribute;
+      var imageAttribute = this.model.imageAttribute;
+      var selected = this.model._selected;
+
+      var queryContainers = this.svg.selectAll('svg.ampersand-search-select-query-container')
+        .data(querySet);
+
+      queryContainers.exit()
+        .remove();
+
+      var queryContainer = queryContainers.enter().append('svg')
+        .attr('class', 'ampersand-search-select-query-container')
+        .attr('y', function(d) { return (2.5 + querySet.indexOf(d) * 2.5) + 'em'; })
+        .style('overflow', 'visible');
+
+      queryContainer.append('defs').append('clipPath')
+        .attr('id', function(d) { return 'ampersand-search-select-clip-path-' + querySet.indexOf(d); })
+      .append('circle')
+        .attr('r', 16)
+        .attr('cx', 16)
+        .attr('cy', 16);
+
+      queryContainer.append('image')
+        .attr('class', 'ampersand-search-select-query-image')
+        .attr('clip-path', function(d) { return 'url(#ampersand-search-select-clip-path-' + querySet.indexOf(d) + ')'; })
+        .attr('height', 32)
+        .attr('width', 32);
+
+      queryContainer.append('text')
+        .attr('class', 'ampersand-search-select-query-text')
+        .attr('x', 48)
+        .attr('y', 20);
+
+      var queryAdd = queryContainer.append('svg')
+        .attr('class', 'ampersand-search-select-query-add')
+        .attr('x', '100%')
+        .attr('y', '0.5em')
+        .style('overflow', 'visible');
+
+      queryAdd.append('circle')
+        .attr('class', 'ampersand-search-select-query-add-circle')
+        .attr('r', 12)
+        .attr('cx', -16)
+        .attr('cy', 8);
+
+      queryAdd.append('line')
+        .attr('class', 'ampersand-search-select-query-add-line')
+        .attr('x1', -20)
+        .attr('y1', 8)
+        .attr('x2', -12)
+        .attr('y2', 8);
+
+      queryAdd.append('line')
+        .attr('class', 'ampersand-search-select-query-add-line')
+        .attr('x1', -16)
+        .attr('y1', 4)
+        .attr('x2', -16)
+        .attr('y2', 12);
+
+      var queryCheck = queryContainer.append('svg')
+        .attr('class', 'ampersand-search-select-query-check')
+        .attr('x', '100%')
+        .attr('y', '0.5em')
+        .style('overflow', 'visible');
+
+      queryCheck.append('circle')
+        .attr('class', 'ampersand-search-select-query-check-circle')
+        .attr('r', 12)
+        .attr('cx', -16)
+        .attr('cy', 8);
+
+      queryCheck.append('line')
+        .attr('class', 'ampersand-search-select-query-check-line')
+        .attr('x1', -20)
+        .attr('y1', 8)
+        .attr('x2', -16)
+        .attr('y2', 12);
+
+      queryCheck.append('line')
+        .attr('class', 'ampersand-search-select-query-check-line')
+        .attr('x1', -16)
+        .attr('y1', 12)
+        .attr('x2', -12)
+        .attr('y2', 4);
+
+      queryContainers.select('image.ampersand-search-select-query-image')
+        .attr('xlink:href', function(d) { return d[imageAttribute]; });
+
+      queryContainers.select('text.ampersand-search-select-query-text')
+        .text(function(d) { return d[queryAttribute]; });
+
+      queryContainers.select('svg.ampersand-search-select-query-add')
+        .style('display', function(d) { return selected.indexOf(d[idAttribute]) === -1 ? 'initial' : 'none'; });
+
+      queryContainers.select('svg.ampersand-search-select-query-check')
+        .style('display', function(d) { return selected.indexOf(d[idAttribute]) > -1 ? 'initial' : 'none'; });
     },
     search: function(event) {
       this.model.query = event.target.value.trim();
