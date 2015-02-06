@@ -217,10 +217,10 @@
           .text(function(d) { return d[queryAttribute]; });
 
         queryContainers.select('svg.ampersand-search-select-query-add')
-          .style('display', function(d) { return !~selected.indexOf(d[idAttribute]) ? 'initial' : 'none'; });
+          .style('display', function(d) { return selected.indexOf(d[idAttribute]) === -1 ? 'initial' : 'none'; });
 
         queryContainers.select('svg.ampersand-search-select-query-check')
-          .style('display', function(d) { return !!~selected.indexOf(d[idAttribute]) ? 'initial' : 'none'; });
+          .style('display', function(d) { return selected.indexOf(d[idAttribute]) > -1 ? 'initial' : 'none'; });
       }
     },
     search: function(event) {
