@@ -1,5 +1,5 @@
-AmpersandCalendar
-==================
+AmpersandSearchSelect
+=====================
 Creates a search bar that shows a list of matching items that can be selected.
 
 ## Features
