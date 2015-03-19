@@ -16,6 +16,7 @@
       idAttribute: 'string',
       imageAttribute: 'string',
       queryAttribute: 'string',
+      showAllDefault: [ 'boolean', false, false ],
 
       // Private Variables
       _data: 'object',
@@ -34,17 +35,7 @@
         }, true);
       });
 
-      this.on('change:query', function(selectState, query) {
-        var transformedQuery = query.toLowerCase();
-        selectState._data.configure({
-          filter: function(model) {
-            var name = model.name.toLowerCase();
-            return transformedQuery.length > 0 ? _.startsWith(name, transformedQuery) || _.startsWith(transformedQuery, name) : false;
-          }
-        }, true);
-
-        selectState._querySet = selectState._data.models;
-      });
+      this.on('change:query', this.runQuery);
     },
     selectItem: function(event) {
       d3.select(event.target.parentNode).each(function(d) {
@@ -57,6 +48,17 @@
         _.remove(this._selected, function(id) { return id === d[this.idAttribute]; }.bind(this));
         this.trigger('change:_selected', this, this._selected);
       }.bind(this));
+    },
+    runQuery: function(selectState, query) {
+      var transformedQuery = query.toLowerCase();
+      selectState._data.configure({
+        filter: function(model) {
+          var name = model.name.toLowerCase();
+          return transformedQuery.length > 0 ? _.startsWith(name, transformedQuery) || _.startsWith(transformedQuery, name) : selectState.showAllDefault;
+        }
+      }, true);
+
+      selectState._querySet = selectState._data.models;
     }
   });
 

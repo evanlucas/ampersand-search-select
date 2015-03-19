@@ -1,6 +1,6 @@
 {
   "name": "ampersand-search-select",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Creates a search bar that shows a list of matching items that can be selected.",
   "main": "ampersand-search-select.js",
   "scripts": {
