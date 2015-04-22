@@ -70,8 +70,8 @@
     },
     events: {
       'keyup .ampersand-search-select-bar': 'search',
-      'click svg.ampersand-search-select-query-add': 'selectItem',
-      'click svg.ampersand-search-select-query-check': 'deselectItem'
+      'click svg.ampersand-search-select-list-item-add': 'selectItem',
+      'click svg.ampersand-search-select-list-item-check': 'deselectItem'
     },
     bindings: {
       'model._querySet': {
@@ -89,7 +89,8 @@
       AmpersandView.prototype.render.call(this);
 
       var searchSelectContainer = this.div = d3.select(this.el)
-        .attr('class', 'ampersand-search-select');
+        .attr('class', 'ampersand-search-select')
+        .style('position', 'relative');
 
       searchSelectContainer.append('input')
         .attr('class', 'ampersand-search-select-bar')
@@ -99,7 +100,7 @@
         .attr('class', 'ampersand-search-select-glass')
         .attr('width', 20)
         .attr('height', 20)
-        .style('position', 'relative');
+        .style('position', 'absolute');
 
       searchGlass.append('circle')
         .attr('class', 'ampersand-search-select-glass-circle')
@@ -113,9 +114,12 @@
         .attr('y1', 17)
         .attr('x2', 7.5)
         .attr('y2', 10);
+
+      this.ul = searchSelectContainer.append('ul')
+        .attr('class', 'ampersand-searchs-select-list');
     },
     renderQuerySet: function(querySet) {
-      if (!this.div) {
+      if (!this.div || !this.ul) {
         return;
       }
 
@@ -124,97 +128,81 @@
       var imageAttribute = this.model.imageAttribute;
       var selected = this.model._selected;
 
-      var queryContainers = this.div.selectAll('svg.ampersand-search-select-query-container')
+      var listItems = this.ul.selectAll('li.ampersand-search-select-list-item')
         .data(querySet);
 
-      queryContainers.exit()
+      listItems.exit()
         .remove();
 
-      var queryContainer = queryContainers.enter().append('svg')
-        .attr('class', 'ampersand-search-select-query-container')
-        .attr('y', function(d) { return (2.5 + querySet.indexOf(d) * 2.5) + 'em'; })
-        .style('overflow', 'visible');
+      var listItem = listItems.enter().append('li')
+        .attr('class', 'ampersand-search-select-list-item');
 
-      queryContainer.append('defs').append('clipPath')
-        .attr('id', function(d) { return 'ampersand-search-select-clip-path-' + querySet.indexOf(d); })
-      .append('circle')
-        .attr('r', 16)
-        .attr('cx', 16)
-        .attr('cy', 16);
+      listItem.append('img')
+        .attr('class', 'ampersand-search-select-list-item-image');
 
-      queryContainer.append('image')
-        .attr('class', 'ampersand-search-select-query-image')
-        .attr('clip-path', function(d) { return 'url(#ampersand-search-select-clip-path-' + querySet.indexOf(d) + ')'; })
-        .attr('height', 32)
-        .attr('width', 32);
+      listItem.append('span')
+        .attr('class', 'ampersand-search-select-list-item-text');
 
-      queryContainer.append('text')
-        .attr('class', 'ampersand-search-select-query-text')
-        .attr('x', 48)
-        .attr('y', 20);
+      var listItemAdd = listItem.append('svg')
+        .attr('class', 'ampersand-search-select-list-item-add')
+        .attr('height', 24)
+        .attr('width', 24);
 
-      var queryAdd = queryContainer.append('svg')
-        .attr('class', 'ampersand-search-select-query-add')
-        .attr('x', '100%')
-        .attr('y', '0.5em')
-        .style('overflow', 'visible');
-
-      queryAdd.append('circle')
-        .attr('class', 'ampersand-search-select-query-add-circle')
+      listItemAdd.append('circle')
+        .attr('class', 'ampersand-search-select-list-item-add-circle')
         .attr('r', 12)
-        .attr('cx', -16)
-        .attr('cy', 8);
+        .attr('cx', 12)
+        .attr('cy', 12);
 
-      queryAdd.append('line')
-        .attr('class', 'ampersand-search-select-query-add-line')
-        .attr('x1', -20)
+      listItemAdd.append('line')
+        .attr('class', 'ampersand-search-select-list-item-add-line')
+        .attr('x1', 8)
+        .attr('y1', 12)
+        .attr('x2', 16)
+        .attr('y2', 12);
+
+      listItemAdd.append('line')
+        .attr('class', 'ampersand-search-select-list-item-add-line')
+        .attr('x1', 12)
         .attr('y1', 8)
-        .attr('x2', -12)
+        .attr('x2', 12)
+        .attr('y2', 16);
+
+      var listItemCheck = listItem.append('svg')
+        .attr('class', 'ampersand-search-select-list-item-check')
+        .attr('height', 24)
+        .attr('width', 24);
+
+      listItemCheck.append('circle')
+        .attr('class', 'ampersand-search-select-list-item-check-circle')
+        .attr('r', 12)
+        .attr('cx', 12)
+        .attr('cy', 12);
+
+      listItemCheck.append('line')
+        .attr('class', 'ampersand-search-select-list-item-check-line')
+        .attr('x1', 8)
+        .attr('y1', 12)
+        .attr('x2', 12)
+        .attr('y2', 16);
+
+      listItemCheck.append('line')
+        .attr('class', 'ampersand-search-select-list-item-check-line')
+        .attr('x1', 12)
+        .attr('y1', 16)
+        .attr('x2', 16)
         .attr('y2', 8);
 
-      queryAdd.append('line')
-        .attr('class', 'ampersand-search-select-query-add-line')
-        .attr('x1', -16)
-        .attr('y1', 4)
-        .attr('x2', -16)
-        .attr('y2', 12);
+      listItems.select('img.ampersand-search-select-list-item-image')
+        .attr('src', function(d) { return d[imageAttribute]; });
 
-      var queryCheck = queryContainer.append('svg')
-        .attr('class', 'ampersand-search-select-query-check')
-        .attr('x', '100%')
-        .attr('y', '0.5em')
-        .style('overflow', 'visible');
-
-      queryCheck.append('circle')
-        .attr('class', 'ampersand-search-select-query-check-circle')
-        .attr('r', 12)
-        .attr('cx', -16)
-        .attr('cy', 8);
-
-      queryCheck.append('line')
-        .attr('class', 'ampersand-search-select-query-check-line')
-        .attr('x1', -20)
-        .attr('y1', 8)
-        .attr('x2', -16)
-        .attr('y2', 12);
-
-      queryCheck.append('line')
-        .attr('class', 'ampersand-search-select-query-check-line')
-        .attr('x1', -16)
-        .attr('y1', 12)
-        .attr('x2', -12)
-        .attr('y2', 4);
-
-      queryContainers.select('image.ampersand-search-select-query-image')
-        .attr('xlink:href', function(d) { return d[imageAttribute]; });
-
-      queryContainers.select('text.ampersand-search-select-query-text')
+      listItems.select('span.ampersand-search-select-list-item-text')
         .text(function(d) { return d[queryAttribute]; });
 
-      queryContainers.select('svg.ampersand-search-select-query-add')
+      listItems.select('svg.ampersand-search-select-list-item-add')
         .style('display', function(d) { return selected.indexOf(d[idAttribute]) === -1 ? 'initial' : 'none'; });
 
-      queryContainers.select('svg.ampersand-search-select-query-check')
+      listItems.select('svg.ampersand-search-select-list-item-check')
         .style('display', function(d) { return selected.indexOf(d[idAttribute]) > -1 ? 'initial' : 'none'; });
     },
     search: function(event) {
