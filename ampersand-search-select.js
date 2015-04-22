@@ -63,7 +63,7 @@
   });
 
   var SearchSelectView = AmpersandView.extend({
-    template: '<svg></svg>',
+    template: '<div></div>',
     autoRender: true,
     initialize: function() {
       this.model._view = this;
@@ -88,24 +88,14 @@
     render: function() {
       AmpersandView.prototype.render.call(this);
 
-      var searchSelect = this.svg = d3.select(this.el)
-        .attr('class', 'ampersand-search-select')
-        .attr('width', '100%')
-        .attr('height', '9.5em');
+      var searchSelectContainer = this.div = d3.select(this.el)
+        .attr('class', 'ampersand-search-select');
 
-      var searchForeignObject = searchSelect.append('foreignObject')
-        .attr('class', 'ampersand-search-select-foreign-object')
-        .attr('width', '100%');
-
-      var searchBody = searchForeignObject.append('xhtml:body')
-        .attr('class', 'ampersand-search-select-body')
-        .style('position', 'relative');
-
-      searchBody.append('input')
+      searchSelectContainer.append('input')
         .attr('class', 'ampersand-search-select-bar')
         .attr('type', 'text');
 
-      var searchGlass = searchBody.append('svg')
+      var searchGlass = searchSelectContainer.append('svg')
         .attr('class', 'ampersand-search-select-glass')
         .attr('width', 20)
         .attr('height', 20)
@@ -125,7 +115,7 @@
         .attr('y2', 10);
     },
     renderQuerySet: function(querySet) {
-      if (!this.svg) {
+      if (!this.div) {
         return;
       }
 
@@ -134,7 +124,7 @@
       var imageAttribute = this.model.imageAttribute;
       var selected = this.model._selected;
 
-      var queryContainers = this.svg.selectAll('svg.ampersand-search-select-query-container')
+      var queryContainers = this.div.selectAll('svg.ampersand-search-select-query-container')
         .data(querySet);
 
       queryContainers.exit()
